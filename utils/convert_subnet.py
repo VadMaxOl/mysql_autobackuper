@@ -1,6 +1,5 @@
 import socket
 import struct
-from argparse import ArgumentParser
 from subnet_info import SubnetInfo
 
 # Convert Subnet Mask To CIDR: 255.255.255.0 -> 24

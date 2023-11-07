@@ -1,33 +1,21 @@
-from PySide6.QtWidgets import QTableView, QLabel
+from PySide6.QtWidgets import QTableView
 from PySide6.QtCore import Qt, QAbstractTableModel
 from PySide6 import QtGui
 from typing import List
-
 import pandas as pd
-
+from data.constants import COLUMNS_DEVICES
 
 data_table: pd.DataFrame # глобальная переменная для хранения данных РАБОЧЕЙ таблицы...
 
-def get_devices_table(repair: Repair = None) -> pd.DataFrame:
+def get_devices_table(ip_adreses: list = None) -> pd.DataFrame:
     data_frame = list()
     indexes = list()
     count = 0
-    for operation in operations:
+    for ip_adress in ip_adreses:
         indexes.append(count)
         count += 1
-        data_frame.append([operation.operation_entry_at, # дата и время вноса
-                        operation.operation_workpermit, # наряд
-                        operation.operation_system.system_kks, # kks оборудования
-                        operation.operation_system.system_name, # оборудование
-                        operation.operation_object.object_real_code + ' - ' + operation.operation_object.object_name + ' - ' + str(operation.operation_count_object_in)+ ' ед.' , # регистрационный код СО, наименование и количество
-                        operation.operation_user_in.user_surname + ' ' + operation.operation_user_in.user_name[0]+'. '+operation.operation_user_in.user_fathername[0]+'.', # ФИО исполнителя
-                        operation.operation_observer_in.user_surname + ' ' + operation.operation_observer_in.user_name[0]+'. '+operation.operation_observer_in.user_fathername[0]+'.', # ФИО наблюдателя
-                        'да' if operation.operation_left_in_the_zone == True else '',  # оставлено в ЗОНЕ?
-                        '' if operation.operation_exit_at == None else operation.operation_exit_at, # дата и время Выноса
-                        operation.operation_user_out.user_surname + ' ' + operation.operation_user_out.user_name[0]+'. '+operation.operation_user_out.user_fathername[0]+'.' if operation.operation_user_out else '', # ФИО исполнителя
-                        operation.operation_observer_out.user_surname + ' ' + operation.operation_observer_out.user_name[0]+'. '+operation.operation_observer_out.user_fathername[0]+'.' if operation.operation_observer_out else '']  # ФИО наблюдателя
-                        )
-    result = pd.DataFrame(data_frame, columns=COLUMNS, index=indexes)
+        data_frame.append([ip_adress])  # ФИО наблюдателя
+    result = pd.DataFrame(data_frame, columns=COLUMNS_DEVICES, index=indexes)
     return result
 
 ################ модель данных для таблицы РАБОЧЕГО ОКНА #########
