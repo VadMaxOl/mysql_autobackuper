@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QMainWindow, QMessageBox, QHeaderView
+import subprocess
 
 from ui.main_window import Ui_MainWindow
 from data.list_devices import Devices
@@ -21,6 +22,7 @@ class MainWindow(QMainWindow):
         self.set_text_for_labels_device()
         self.ui.comboBox_devices.currentIndexChanged.connect(self.change_device)
         self.ui.skanport_button.clicked.connect(self.run_scan_port)
+        self.ui.devices_view.doubleClicked.connect(self.run_backup)
         self.ui.devices_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
     def set_text_for_labels_device(self) -> None:
@@ -45,4 +47,11 @@ class MainWindow(QMainWindow):
         model = table.TableModel_MainWindow(table.data_table, self.ui.devices_view)
         self.ui.devices_view.setModel(model)
         self.ui.devices_view.resizeColumnsToContents()
+
+    def run_backup(self, event) -> None:
+        table.data_table = event.model()._data
+        ip_adress:str = table.data_table.iat[event.row(), 0]
+        result = subprocess.Popen(f'mysqldump mysql4p --host={ip_adress} --port={self.ui.port_enter.text()} --user=admin --password=1qaz!QAZadmin --result-file=dump.sql', shell=True)
+        self.msg.warning(self, 'Резервное копирование', 'Резервное копирование выполнено!')
+        print(result)
         
