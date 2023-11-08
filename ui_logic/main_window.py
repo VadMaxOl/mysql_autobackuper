@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QHeaderView
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QHeaderView, QFileDialog
 import subprocess
 
 from ui.main_window import Ui_MainWindow
@@ -23,7 +23,6 @@ class MainWindow(QMainWindow):
         self.ui.comboBox_devices.currentIndexChanged.connect(self.change_device)
         self.ui.skanport_button.clicked.connect(self.run_scan_port)
         self.ui.devices_view.doubleClicked.connect(self.run_backup)
-        self.ui.devices_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
     def set_text_for_labels_device(self) -> None:
         self.ui.label_info_mac_adress.setText(self.current_device['MAC'])
@@ -47,11 +46,23 @@ class MainWindow(QMainWindow):
         model = table.TableModel_MainWindow(table.data_table, self.ui.devices_view)
         self.ui.devices_view.setModel(model)
         self.ui.devices_view.resizeColumnsToContents()
+        self.ui.devices_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
 
     def run_backup(self, event) -> None:
-        table.data_table = event.model()._data
-        ip_adress:str = table.data_table.iat[event.row(), 0]
-        result = subprocess.Popen(f'mysqldump mysql4p --host={ip_adress} --port={self.ui.port_enter.text()} --user=admin --password=1qaz!QAZadmin --result-file=dump.sql', shell=True)
-        self.msg.warning(self, 'Резервное копирование', 'Резервное копирование выполнено!')
-        print(result)
+        login = self.ui.login_enter.text()
+        password = self.ui.password_enter.text()
+        if login == '' or password == '':
+            self.msg.warning(self, 'Внимание!', 'Заполните логин и пароль!')
+            return
+        self.file_path_name = QFileDialog.getSaveFileName(self, 'Куда сохранить DUMP?', filter='*.sql')[0]
+        if self.file_path_name != None:
+            table.data_table = event.model()._data
+            ip_adress:str = table.data_table.iat[event.row(), 0]
+            result = subprocess.Popen(f'.\mysqldump\mysqldump mysql4p --host={ip_adress} --port={self.ui.port_enter.text()} --user={login} --password={password} --result-file={self.file_path_name}', shell=True)
+            
+            self.msg.warning(self, 'Резервное копирование', 'Резервное копирование выполнено!')
+        else:
+            self.msg.warning(self, 'Внимание!', 'Нужно выбрать файл!')
+        #print(result)
         

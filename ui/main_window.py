@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_windowUAWgVg.ui'
+## Form generated from reading UI file 'main_windowvBRoKM.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.5.2
 ##
@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(593, 659)
+        MainWindow.resize(610, 659)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_7 = QVBoxLayout(self.centralwidget)
@@ -186,26 +186,12 @@ class Ui_MainWindow(object):
 
         self.password_enter = QLineEdit(self.centralwidget)
         self.password_enter.setObjectName(u"password_enter")
+        self.password_enter.setEchoMode(QLineEdit.Password)
 
         self.verticalLayout_2.addWidget(self.password_enter)
 
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
-
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label_3 = QLabel(self.centralwidget)
-        self.label_3.setObjectName(u"label_3")
-
-        self.verticalLayout_3.addWidget(self.label_3)
-
-        self.authorization_button = QPushButton(self.centralwidget)
-        self.authorization_button.setObjectName(u"authorization_button")
-
-        self.verticalLayout_3.addWidget(self.authorization_button)
-
-
-        self.horizontalLayout.addLayout(self.verticalLayout_3)
 
 
         self.verticalLayout_7.addLayout(self.horizontalLayout)
@@ -241,7 +227,5 @@ class Ui_MainWindow(object):
         self.login_enter.setText("")
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0430\u0440\u043e\u043b\u044c", None))
         self.password_enter.setInputMask("")
-        self.label_3.setText("")
-        self.authorization_button.setText(QCoreApplication.translate("MainWindow", u"\u0412\u043e\u0439\u0442\u0438", None))
     # retranslateUi
 
