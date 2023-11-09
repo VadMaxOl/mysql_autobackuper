@@ -56,6 +56,7 @@ class MainWindow(QMainWindow):
             self.msg.warning(self, 'Внимание!', 'Заполните логин и пароль!')
             return
         self.file_path_name = QFileDialog.getSaveFileName(self, 'Куда сохранить DUMP?', filter='*.sql')[0]
+        print(self.file_path_name)
         if self.file_path_name != None:
             table.data_table = event.model()._data
             ip_adress:str = table.data_table.iat[event.row(), 0]
