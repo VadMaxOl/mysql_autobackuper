@@ -1,1 +1,1 @@
-pyinstaller --noconsole --workpath=%cd% --paths=%cd% --distpath=dist\ main.py --contents-directory="."
+pyinstaller --icon=icon.ico --noconsole --workpath="%cd%" --paths="%cd%" --distpath=dist\ main.py --add-data mysqldump:mysqldump --contents-directory="."

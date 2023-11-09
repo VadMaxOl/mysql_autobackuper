@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow
 from ui_logic.main_window import MainWindow
 from data.list_devices import Devices
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     devices = dict()

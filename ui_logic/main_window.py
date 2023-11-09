@@ -1,5 +1,7 @@
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QHeaderView, QFileDialog
+import os
 import subprocess
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QHeaderView, QFileDialog
+from datetime import datetime
 
 from ui.main_window import Ui_MainWindow
 from data.list_devices import Devices
@@ -53,15 +55,22 @@ class MainWindow(QMainWindow):
         login = self.ui.login_enter.text()
         password = self.ui.password_enter.text()
         if login == '' or password == '':
-            self.msg.warning(self, 'Внимание!', 'Заполните логин и пароль!')
+            self.msg.warning(self, 'Внимание!', 'Заполните данные о пользователе и пароле!')
             return
-        self.file_path_name = QFileDialog.getSaveFileName(self, 'Куда сохранить DUMP?', filter='*.sql')[0]
+        self.file_path_name = QFileDialog.getSaveFileName(self, 'Куда сохранить DUMP?', datetime.now().strftime("%Y-%m-%d_%H-%M-%S")+'.sql', filter='*.sql')[0]
         print(self.file_path_name)
         if self.file_path_name != None:
             table.data_table = event.model()._data
             ip_adress:str = table.data_table.iat[event.row(), 0]
-            result = subprocess.Popen(f'.\mysqldump\mysqldump mysql4p --host={ip_adress} --port={self.ui.port_enter.text()} --user={login} --password={password} --result-file={self.file_path_name}', shell=True)
-            
+            result = subprocess.Popen(f'.\mysqldump\mysqldump mysql4p --host={ip_adress} --port={self.ui.port_enter.text()} --user={login} --password={password} --result-file={self.file_path_name} --events',
+                                       shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, error = result.communicate()
+            errors = error.decode().split('\n')[1:-1]
+            if errors:
+                error_str = '\n'.join(errors)
+                self.msg.warning(self, 'Ошибка!', error_str)
+                os.remove(self.file_path_name)
+                return
             self.msg.warning(self, 'Резервное копирование', 'Резервное копирование выполнено!')
         else:
             self.msg.warning(self, 'Внимание!', 'Нужно выбрать файл!')
